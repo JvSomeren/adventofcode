@@ -12,5 +12,5 @@ function findHash(secretKey, numZeroes) {
 
 var input = 'yzbqklnj';
 
-document.getElementById('answer-part-one').innerHTML = findHash(input, 5);
-document.getElementById('answer-part-two').innerHTML = findHash(input, 6);
+document.getElementById('answer-part-one').innerHTML = findHash(input, 5) + ' was your secret hash';
+document.getElementById('answer-part-two').innerHTML = findHash(input, 6) + ' was your secret hash';
