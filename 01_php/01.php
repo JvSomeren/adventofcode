@@ -1,7 +1,7 @@
 <?php
 
 echo 'Part 1: ';
-include 'part1.php';
+include '01a.php';
 
 echo 'Part 2: ';
-include 'part2.php';
+include '01b.php';

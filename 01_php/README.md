@@ -2,4 +2,5 @@
 Solution for [day 1](https://adventofcode.com/2017/day/1) of the Advent of Code challenge.
 
 ## Run
-`$ php solution.php`
+`$ php 01.php`
+
