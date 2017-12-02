@@ -22,27 +22,20 @@ std::vector< std::vector<int> > inputToVector() {
 }
 
 int main () {
-  int checksum = 0, low, high;
-  unsigned int i, j;
+  int checksum = 0;
+  unsigned int i, j, k;
   std::vector <std::vector<int> > spreadsheet;
   
   spreadsheet = inputToVector();
 
   for(i = 0; i < spreadsheet.size(); i++) {
-    low = high = spreadsheet[i][0];
-
-    for(j = 0; j < spreadsheet[i].size(); j++) {
-      if(spreadsheet[i][j] < low)
-        low = spreadsheet[i][j];
-
-      if(spreadsheet[i][j] > high)
-        high = spreadsheet[i][j];
-    }
-
-    checksum += high - low;
+    for(j = 0; j < spreadsheet[i].size(); j++)
+      for(k = 0; k < spreadsheet[i].size(); k++)
+        if(spreadsheet[i][j] % spreadsheet[i][k] == 0 && j != k)
+          checksum += spreadsheet[i][j] / spreadsheet[i][k];
   }
 
-  std::cout << "Part 1: " << checksum << std::endl;
+  std::cout << "Part 2: " << checksum << std::endl;
 
   return 0;
 }
