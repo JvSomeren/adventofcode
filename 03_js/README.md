@@ -2,4 +2,5 @@
 Solution for [day 3](https://adventofcode.com/2017/day/3) of the Advent of Code challenge.
 
 ## Run
-Open `03.html` in any browser.
+`$ node 03a.js`
+`$ node 03b.js`

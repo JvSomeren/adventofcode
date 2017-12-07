@@ -1,102 +1,96 @@
-part2 = () => {
+calculateValue = (spiral, pos) => {
+  var value = 0;
 
-  calculateValue = (spiral, pos) => {
-    var value = 0;
+  if(spiral[(pos.x-1) + ':' + (pos.y-1)] !== undefined)
+    value += spiral[(pos.x-1) + ':' + (pos.y-1)];
 
-    if(spiral[(pos.x-1) + ':' + (pos.y-1)] !== undefined)
-      value += spiral[(pos.x-1) + ':' + (pos.y-1)];
+  if(spiral[(pos.x-1) + ':' + (pos.y)] !== undefined)
+    value += spiral[(pos.x-1) + ':' + (pos.y)];
 
-    if(spiral[(pos.x-1) + ':' + (pos.y)] !== undefined)
-      value += spiral[(pos.x-1) + ':' + (pos.y)];
+  if(spiral[(pos.x-1) + ':' + (pos.y+1)] !== undefined)
+    value += spiral[(pos.x-1) + ':' + (pos.y+1)];
 
-    if(spiral[(pos.x-1) + ':' + (pos.y+1)] !== undefined)
-      value += spiral[(pos.x-1) + ':' + (pos.y+1)];
+  if(spiral[(pos.x) + ':' + (pos.y-1)] !== undefined)
+    value += spiral[(pos.x) + ':' + (pos.y-1)];
 
-    if(spiral[(pos.x) + ':' + (pos.y-1)] !== undefined)
-      value += spiral[(pos.x) + ':' + (pos.y-1)];
+  if(spiral[(pos.x) + ':' + (pos.y+1)] !== undefined)
+    value += spiral[(pos.x) + ':' + (pos.y+1)];
 
-    if(spiral[(pos.x) + ':' + (pos.y+1)] !== undefined)
-      value += spiral[(pos.x) + ':' + (pos.y+1)];
+  if(spiral[(pos.x+1) + ':' + (pos.y-1)] !== undefined)
+    value += spiral[(pos.x+1) + ':' + (pos.y-1)];
 
-    if(spiral[(pos.x+1) + ':' + (pos.y-1)] !== undefined)
-      value += spiral[(pos.x+1) + ':' + (pos.y-1)];
+  if(spiral[(pos.x+1) + ':' + (pos.y)] !== undefined)
+    value += spiral[(pos.x+1) + ':' + (pos.y)];
 
-    if(spiral[(pos.x+1) + ':' + (pos.y)] !== undefined)
-      value += spiral[(pos.x+1) + ':' + (pos.y)];
+  if(spiral[(pos.x+1) + ':' + (pos.y+1)] !== undefined)
+    value += spiral[(pos.x+1) + ':' + (pos.y+1)];
 
-    if(spiral[(pos.x+1) + ':' + (pos.y+1)] !== undefined)
-      value += spiral[(pos.x+1) + ':' + (pos.y+1)];
+  return value;
+};
 
-    return value;
-  };
+moveRight = (move, spiral, pos) => {
+  pos.x += 1;
 
-  moveRight = (move, spiral, pos) => {
-    pos.x += 1;
+  spiral[pos.x + ':' + pos.y] = calculateValue(spiral, pos);
 
-    spiral[pos.x + ':' + pos.y] = calculateValue(spiral, pos);
+  if(spiral[pos.x + ':' + (pos.y+1)] === undefined)
+    move[0] = 'u';
+};
 
-    if(spiral[pos.x + ':' + (pos.y+1)] === undefined)
-      move[0] = 'u';
-  };
+moveUp = (move, spiral, pos) => {
+  pos.y += 1;
 
-  moveUp = (move, spiral, pos) => {
-    pos.y += 1;
+  spiral[pos.x + ':' + pos.y] = calculateValue(spiral, pos);
 
-    spiral[pos.x + ':' + pos.y] = calculateValue(spiral, pos);
+  if(spiral[(pos.x-1) + ':' + pos.y] === undefined)
+    move[0] = 'l';
+};
 
-    if(spiral[(pos.x-1) + ':' + pos.y] === undefined)
-      move[0] = 'l';
-  };
+moveLeft = (move, spiral, pos) => {
+  pos.x -= 1;
 
-  moveLeft = (move, spiral, pos) => {
-    pos.x -= 1;
+  spiral[pos.x + ':' + pos.y] = calculateValue(spiral, pos);
 
-    spiral[pos.x + ':' + pos.y] = calculateValue(spiral, pos);
+  if(spiral[pos.x + ':' + (pos.y-1)] === undefined)
+    move[0] = 'd';
+};
 
-    if(spiral[pos.x + ':' + (pos.y-1)] === undefined)
-      move[0] = 'd';
-  };
+moveDown = (move, spiral, pos) => {
+  pos.y -= 1;
 
-  moveDown = (move, spiral, pos) => {
-    pos.y -= 1;
+  spiral[pos.x + ':' + pos.y] = calculateValue(spiral, pos);
 
-    spiral[pos.x + ':' + pos.y] = calculateValue(spiral, pos);
-
-    if(spiral[(pos.x+1) + ':' + pos.y] === undefined)
-      move[0] = 'r';
-  };
-    
-  const part2 = document.getElementById("part2");
-
-  const input = 347991;
+  if(spiral[(pos.x+1) + ':' + pos.y] === undefined)
+    move[0] = 'r';
+};
   
-  var spiral = {
-    '0:0': 1
-  };
+const input = 347991;
 
-  var pos = {
-    x: 0,
-    y: 0
-  };
+var spiral = {
+  '0:0': 1
+};
 
-  var move = ['r'];
-  while(spiral[pos.x + ':' + pos.y] < input) {
-    switch(move[0]) {
-      case 'r':
-        moveRight(move, spiral, pos);
-        break;
-      case 'u':
-        moveUp(move, spiral, pos);
-        break;
-      case 'l':
-        moveLeft(move, spiral, pos);
-        break;
-      case 'd':
-        moveDown(move, spiral, pos);
-        break;
-    }
+var pos = {
+  x: 0,
+  y: 0
+};
+
+var move = ['r'];
+while(spiral[pos.x + ':' + pos.y] < input) {
+  switch(move[0]) {
+    case 'r':
+      moveRight(move, spiral, pos);
+      break;
+    case 'u':
+      moveUp(move, spiral, pos);
+      break;
+    case 'l':
+      moveLeft(move, spiral, pos);
+      break;
+    case 'd':
+      moveDown(move, spiral, pos);
+      break;
   }
-
-  part2.innerHTML = spiral[pos.x + ':' + pos.y];
-
 }
+
+console.log('Part 2:', spiral[pos.x + ':' + pos.y]);
