@@ -5,6 +5,8 @@ class Program2 {
 
   public $weight = '';
 
+  public $sum_weight = '';
+
   public $children = [];
 
   function __construct($row) {
@@ -12,6 +14,8 @@ class Program2 {
 
     preg_match('/(\d+)/', $row[1], $match);
     $this->weight = $match[0];
+
+    $this->sum_weight = $match[0];
 
     for($i = 3; $i < count($row); $i++) {
       preg_match('/(\w+)/', $row[$i], $match);
@@ -43,22 +47,24 @@ foreach ($programs as $programName => $program) {
 function calculateChildWeight($prog) {
   $sum = $prog->weight;
 
-  foreach ($prog->children as $childName => $child) {
-    $sum += $child->weight;
-  }
-
   return $sum;
 }
 
 // progWeight + childProgWeight
-function calculateProgramWeight($prog) {
+function calculateProgramWeight(&$prog) {
   $sum = $prog->weight;
   $answer = 0;
   $childIndex = -1;
 
   foreach ($prog->children as $childName => $child) {
+    calculateProgramWeight($child);
+  }
+
+  foreach ($prog->children as $childName => $child) {
     $sum += $child->weight;
   }
+
+  $prog->weight = $sum;
 
   $children = [];
 
@@ -66,40 +72,26 @@ function calculateProgramWeight($prog) {
     array_push($children, calculateChildWeight($child));
   }
 
-  if($children[0] != $children[1] &&
-     $children[0] != $children[2]) {
-    $answer = $children[1] - $children[0];
-    $childIndex = 0;
-  } else if($children[1] != $children[0] &&
-            $children[1] != $children[2]) {
-    $answer = $children[0] - $children[1];
-    $childIndex = 1;
-  } else if($children[2] != $children[0] &&
-            $children[2] != $children[1]) {
-    $answer = $children[0] - $children[2];
-    $childIndex = 2;
-  } else if($children[3] != $children[0] &&
-            $children[3] != $children[1]) {
-    $answer = $children[0] - $children[3];
-    $childIndex = 3;
-  } else if($children[4] != $children[0] &&
-            $children[4] != $children[1]) {
-    $answer = $children[0] - $children[4];
-    $childIndex = 4;
-  } else if($children[5] != $children[0] &&
-            $children[5] != $children[1]) {
-    $answer = $children[0] - $children[5];
-    $childIndex = 5;
+  for($i = 0; $i < count($children); $i++) {
+    $unique = 0;
+
+    for($j = 0; $j < count($children); $j++) {
+      if($children[$i] == $children[$j])
+        $unique++;
+    }
+
+    if($unique == 1) {
+      $tmp = ($i == 0) ? $children[1] : $children[0];
+      $childIndex = $i;
+      $answer = $children[$i] - $tmp;
+      break;
+    }
   }
 
   if($answer != 0) {
-    $result = array_values($prog->children)[$childIndex]->weight + $answer;
+    $result = array_values($prog->children)[$childIndex]->name . (array_values($prog->children)[$childIndex]->sum_weight - $answer);
     echo $result . "\n\r";
     return;
-  }
-
-  foreach ($prog->children as $childName => $child) {
-    calculateProgramWeight($child);
   }
 }
 
