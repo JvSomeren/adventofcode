@@ -6,6 +6,7 @@ Solutions to the [Advent of Code 2018](https://adventofcode.com/2018) challenges
 
 * [Day 01](01_js/) - JS
 * [Day 02](02_js/) - JS
+* [Day 03](03_js/) - JS
 
 ## Licence
 
