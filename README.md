@@ -2,6 +2,10 @@
 
 Solutions to the [Advent of Code 2018](https://adventofcode.com/2018) challenges
 
+## Days
+
+* [Day 01](day_01/) - JS
+
 ## Licence
 
 This project is licensed under [MIT license](http://opensource.org/licenses/MIT).
