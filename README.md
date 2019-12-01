@@ -4,6 +4,8 @@ Solutions to the [Advent of Code 2019](https://adventofcode.com/2019) challenges
 
 ## Days
 
+* [Day 01](01_js/) - JS
+
 ## Licence
 
 This project is licensed under [MIT license](http://opensource.org/licenses/MIT).
