@@ -67,3 +67,32 @@ const prepareProgram = (i) => {
 };
 
 console.log('Part one: ', prepareProgram(src));
+
+/**
+ * Part two
+ */
+const findExpectedOutput = (i, expectedOutput) => {
+    let noun = 0;
+    let verb = 0;
+    let output = false;
+    let instructions = null;
+    
+    for(; noun <= 99; noun += 1) {
+        verb = 0;
+
+        for(; verb <= 99; verb += 1) {
+            instructions = [...i];
+            instructions[1] = noun;
+            instructions[2] = verb;
+            
+            output = executeProgram(instructions);
+            if(output === expectedOutput) break;
+        }
+
+        if(output === expectedOutput) break;
+    }
+
+    return 100 * noun + verb;
+};
+
+console.log('Part two: ', findExpectedOutput(src, 19690720));
