@@ -30,4 +30,26 @@ const calculateValidPasswordCount = (start, end) => {
     return list.length;
 };
 
-console.log('Part one: ', calculateValidPasswordCount(src[0], src[1]));
+console.log('Part one: ', calculateValidPasswordCount(...src));
+
+/**
+ * Part two
+ */
+const validatePasswordPartTwo = (password) => {
+    if(!validatePassword(password)) return false;
+
+    return password
+        .replace(/((\d)\2*)/g, '$1,')
+        .split(',')
+        .some(str => str.length === 2);
+};
+
+const calculateValidPasswordCountPartTwo = (start, end) => {
+    let list = new Array().range(start, end);
+
+    list = list.filter(validatePasswordPartTwo);
+
+    return list.length;
+};
+
+console.log('Part two: ', calculateValidPasswordCountPartTwo(...src));
