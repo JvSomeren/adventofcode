@@ -5,11 +5,12 @@ const input = document.body.innerText;
 const src = input.split(',');
 
 /**
- * Part one
+ * Part one & part two
  */
 class Program {
-    constructor(instructionArray) {
+    constructor(instructionArray, inputValue) {
         this.instructions = instructionArray.map(x => new Instruction(x))
+        this.inputValue = inputValue;
         this.instructionPointer = 0;
         this.outputValue = 0;
     }
@@ -57,7 +58,7 @@ class Program {
     }
 
     input() {
-        const [a, outputPosition] = [1, this.getParameter(1)];
+        const [a, outputPosition] = [this.inputValue, this.getParameter(1)];
 
         this.instructions[outputPosition].instruction = a;
         this.instructionPointer += 2;
@@ -71,6 +72,34 @@ class Program {
             else this.outputValue = a;
         }
         this.instructionPointer += 2;
+    }
+
+    jumpIfTrue() {
+        const [a, b] = this.getParametersAsArray(2);
+
+        if(a !== 0) this.instructionPointer = b;
+        else this.instructionPointer += 3;
+    }
+
+    jumpIfFalse() {
+        const [a, b] = this.getParametersAsArray(2);
+
+        if(a === 0) this.instructionPointer = b;
+        else this.instructionPointer += 3;
+    }
+
+    lessThan() {
+        const [a, b, outputPosition] = [...this.getParametersAsArray(2), this.getParameter(3)];
+
+        this.instructions[outputPosition].instruction = a < b ? 1 : 0;
+        this.instructionPointer += 4;
+    }
+
+    equals() {
+        const [a, b, outputPosition] = [...this.getParametersAsArray(2), this.getParameter(3)];
+
+        this.instructions[outputPosition].instruction = a === b ? 1 : 0;
+        this.instructionPointer += 4;
     }
 }
 
@@ -112,6 +141,18 @@ const executeProgram = (program) => {
             case 4:
                 program.output();
                 break;
+            case 5:
+                program.jumpIfTrue();
+                break;
+            case 6:
+                program.jumpIfFalse()
+                break;
+            case 7:
+                program.lessThan();
+                break;
+            case 8:
+                program.equals();
+                break;
             case 99:
                 finished = true;
                 break;
@@ -127,4 +168,5 @@ const executeProgram = (program) => {
     return program.outputValue;
 };
 
-console.log('Part one: ', executeProgram(new Program(src)));
+console.log('Part one: ', executeProgram(new Program(src, 1)));
+console.log('Part two: ', executeProgram(new Program(src, 5)));
