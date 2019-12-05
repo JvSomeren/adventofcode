@@ -12,6 +12,10 @@ const src = input.split('\n').map(x => x.split(',').map(y => {
 /**
  * Part one
  */
+let intersections = [];
+let notWorkingThisCodeThusThisIsGlobalPanel = null;
+let notWorkingThisCodeThusThisIsGlobalSize = null;
+
 const followInstruction = (direction, distance, coordinates) => {
     switch(direction) {
         case 'U':
@@ -82,16 +86,20 @@ const initializePanelWithSize = (size) => {
     }
     
     return panel;
-}
+};
 
 const drawPanel = (paths) => {
     const size = findPanelSize(paths);
     let panel = initializePanelWithSize(size);
     let index = 0;
 
+    notWorkingThisCodeThusThisIsGlobalPanel = panel;
+    notWorkingThisCodeThusThisIsGlobalSize = size;
+
     panel[size.center.y][size.center.x] = '0';
     for(let path of paths) {
         index += 1;
+        let sumOfDistance = 0;
         let position = {
             x: size.center.x,
             y: size.center.y,
@@ -99,10 +107,16 @@ const drawPanel = (paths) => {
         
         for(let instruction of path) {
             for(let i = 0; i < instruction.distance; i += 1) {
+                sumOfDistance += 1;
                 followInstruction(instruction.direction, 1, position);
                 
                 if(panel[position.y][position.x] !== '.' && panel[position.y][position.x] !== index.toString()) {
                     panel[position.y][position.x] = 'X';
+                    intersections.push({
+                        x: position.x,
+                        y: position.y,
+                        [index]: sumOfDistance,
+                    });
                 } else {
                     panel[position.y][position.x] = index.toString();
                 }
@@ -140,3 +154,44 @@ const findClosestIntersection = (paths) => {
 };
 
 console.log('Part one: ', findClosestIntersection(src));
+
+/**
+ * Part two
+ */
+const retraceFirstPath = (path) => {
+    let panel = notWorkingThisCodeThusThisIsGlobalPanel;
+    let size = notWorkingThisCodeThusThisIsGlobalSize;
+    let sumOfDistance = 0;
+    let position = {
+        x: size.center.x,
+        y: size.center.y,
+    }
+
+    for(let instruction of path) {
+        for(let i = 0; i < instruction.distance; i += 1) {
+            sumOfDistance += 1;
+            followInstruction(instruction.direction, 1, position);
+            
+            if(panel[position.y][position.x] === 'X') {
+                const index = intersections.findIndex((intersection) => {
+                    return intersection.x === position.x && intersection.y === position.y;
+                });
+                intersections[index][1] = sumOfDistance;
+            }
+        }
+    }
+};
+
+const findFewestCombinedSteps = (path) => {
+    retraceFirstPath(path);
+
+    for(let i = 0; i < intersections.length; i += 1) {
+        intersections[i].sumOfDistance = intersections[i][1] + intersections[i][2];
+    }
+
+    intersections = intersections.sort((a, b) => (a.sumOfDistance < b.sumOfDistance) ? -1 : 1);
+
+    return intersections[0].sumOfDistance;
+};
+
+console.log('Part two: ', findFewestCombinedSteps(src[0]));
