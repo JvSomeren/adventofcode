@@ -31,6 +31,37 @@ class Orbit {
         this._children.push(child);
     }
 
+    getChildById(id) {
+        if(this.id === id) return this;
+
+        for(let child of this.children) {
+            const c = child.getChildById(id)
+            if(c) return c;
+        }
+
+        return false;
+    }
+
+    orbitalTransfersToPoint(targetId, transferCount = 0, visitedOrbits = []) {
+        const childrenAndParentArray = [...this.children, this.parent];
+        let additionalTransfers = transferCount;
+        visitedOrbits.push(this.id);
+
+        if(this.id === targetId) return transferCount;
+
+        for(let orbit of childrenAndParentArray) {
+            if(orbit === null) continue;
+
+            if(visitedOrbits.indexOf(orbit.id) === -1) {
+                additionalTransfers = orbit.orbitalTransfersToPoint(targetId, transferCount + 1, visitedOrbits);
+
+                if(additionalTransfers !== -1) return additionalTransfers;
+            }
+        }
+        
+        return -1;
+    }
+
     static directAndIndirectOrbitCount(COM, depth = 0) {
         let sum = depth;
 
@@ -69,3 +100,17 @@ const calculateDirectAndIndirectOrbits = (orbits) => {
 };
 
 console.log('Part one: ', calculateDirectAndIndirectOrbits([...src]));
+
+/**
+ * Part two
+ */
+const calculateOrbitalTransfersRequired = (orbits) => {
+    const COM = new Orbit('COM');
+
+    constructMap(orbits, COM);
+
+    const YOU = COM.getChildById('YOU');
+    return YOU.orbitalTransfersToPoint('SAN') - 2; // offset -2 because we don't count YOU and SAN orbit transfer
+};
+
+console.log('Part two: ', calculateOrbitalTransfersRequired([...src]));
