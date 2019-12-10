@@ -12,6 +12,7 @@ Solutions to the [Advent of Code 2019](https://adventofcode.com/2019) challenges
 * [Day 06](06_js/) - JS
 * [Day 07](07_js/) - JS
 * [Day 08](08_js/) - JS
+* [Day 10](10_js/) - JS
 
 ## Licence
 
