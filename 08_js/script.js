@@ -1,7 +1,6 @@
 /**
  * Parse input
  */
-const testInput = '123456789012'
 const input = document.body.innerText;
 const src = input.replace(/\W/g, '');
 
