@@ -7,7 +7,8 @@ fn main() {
 }
 
 fn parse_input(input: &str) -> Vec<usize> {
-    input.trim()
+    input
+        .trim()
         .lines()
         .map(|l| usize::from_str_radix(l, 2).unwrap())
         .collect::<Vec<_>>()
@@ -32,7 +33,9 @@ fn bitmask(length: usize) -> usize {
 }
 
 fn part1(numbers: &[usize], bitlength: usize) -> usize {
-    let gamma: usize = (0..bitlength).map(|i| most_common_bit(&numbers, i) << i).sum();
+    let gamma: usize = (0..bitlength)
+        .map(|i| most_common_bit(&numbers, i) << i)
+        .sum();
 
     gamma * (!gamma & bitmask(bitlength))
 }
@@ -46,14 +49,14 @@ fn _part2(numbers: &[usize], bitlength: usize, is_co2: bool) -> usize {
             break;
         }
     }
-    
+
     *numbers.first().unwrap() & bitmask(bitlength)
 }
 
 fn part2(numbers: &[usize], bitlength: usize) -> usize {
     let oxygen = _part2(&numbers, bitlength, false);
     let co2 = _part2(&numbers, bitlength, true);
-    
+
     oxygen * co2
 }
 
