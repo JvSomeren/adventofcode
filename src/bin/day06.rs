@@ -38,12 +38,21 @@ fn determine_fish_count(mut fish: [usize; 9], number_of_days: usize) -> usize {
     fish.iter().sum()
 }
 
-fn _determine_fish_count_alt(fish: [usize; 9], number_of_days: usize) -> usize {
+fn _determine_fish_count_alt_remove(fish: [usize; 9], number_of_days: usize) -> usize {
     let mut fish = fish.to_vec();
     for _ in 1..=number_of_days {
         let fish_count = fish.remove(0);
         fish[6] += fish_count;
         fish.push(fish_count);
+    }
+
+    fish.iter().sum()
+}
+
+fn _determine_fish_count_alt_rotate(mut fish: [usize; 9], number_of_days: usize) -> usize {
+    for _ in 1..=number_of_days {
+        fish.rotate_left(1);
+        fish[6] += fish[8];
     }
 
     fish.iter().sum()
