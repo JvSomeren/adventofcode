@@ -1,8 +1,7 @@
 defmodule AdventOfCode.Day01 do
   def part1(input) do
     Regex.replace(~r/[a-z]/, input, "", global: true)
-    |> String.split("\n")
-    |> Enum.filter(fn str -> String.length(str) > 0 end)
+    |> String.split("\n", trim: true)
     |> Enum.map(fn str -> String.first(str) <> String.last(str) end)
     |> Enum.map(&String.to_integer/1)
     |> Enum.sum()
@@ -33,8 +32,7 @@ defmodule AdventOfCode.Day01 do
       global: true
     )
     |> remove_alpha()
-    |> String.split("\n")
-    |> Enum.filter(fn str -> String.length(str) > 0 end)
+    |> String.split("\n", trim: true)
     |> Enum.map(fn str -> String.first(str) <> String.last(str) end)
     |> Enum.map(&String.to_integer/1)
     |> Enum.sum()
