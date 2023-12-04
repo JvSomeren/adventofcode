@@ -221,3 +221,24 @@ const findLargestOutputSignal = (instructions) => {
 };
 
 console.log('Part one: ', findLargestOutputSignal(src));
+
+/**
+ * Part two
+ */
+const p2 = (instructions) => {
+    let sequences = AmplifyController.getAllPhaseSettingPermutations([0, 1, 2, 3, 4]);
+    let maxThrusterSignal = 0;
+
+    for(let sequence of sequences) {
+        const amplifiers = {
+            A: new AmplifyController(instructions, sequence),
+            B: new AmplifyController(instructions, sequence),
+            C: new AmplifyController(instructions, sequence),
+            D: new AmplifyController(instructions, sequence),
+            E: new AmplifyController(instructions, sequence),
+        };
+
+    }
+};
+
+console.log('Part two: ', p2(src));
