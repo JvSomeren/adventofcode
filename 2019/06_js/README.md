@@ -1,0 +1,5 @@
+# Day 6: Universal Orbit Map
+Solution for [day 6](https://adventofcode.com/2019/day/6) of the Advent of Code challenge.
+
+## Run
+Paste the code of [`script.js`](script.js) into your console on your [puzzle input](https://adventofcode.com/2019/day/6/input).
