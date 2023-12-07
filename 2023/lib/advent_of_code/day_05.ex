@@ -1,28 +1,22 @@
 defmodule AdventOfCode.Day05 do
   def part1(input) do
-    map =
+    {seeds, order, maps} =
       input
       |> parse()
 
-    map_fn = fn f, {index, key} ->
-      %{map: m, to: to} = map[key]
-
-      new_index =
-        Enum.find_value(m, index, fn x ->
-          if index in x[:source], do: index + x[:diff]
+    seeds
+    |> Enum.map(fn index ->
+      order
+      |> Enum.reduce(index, fn key, value ->
+        maps[key]
+        |> Enum.reduce_while(value, fn {source, dest}, x ->
+          cond do
+            x in source -> {:halt, x - source.first + dest.first}
+            true -> {:cont, x}
+          end
         end)
-
-      if to == :location do
-        new_index
-      else
-        f.(f, {new_index, to})
-      end
-    end
-
-    map[:seeds][:map]
-    |> List.flatten()
-    |> Enum.map(&{&1, :seed})
-    |> Enum.map(&map_fn.(map_fn, &1))
+      end)
+    end)
     |> Enum.min()
   end
 
@@ -30,45 +24,59 @@ defmodule AdventOfCode.Day05 do
   end
 
   defp parse(input) do
-    # group | content
-    #   1   | from || seeds
-    #   2   | to?
-    #   3   | values
-    ~r/(\w+)(?:-to-(\w+) map)?:([0-9 \-\n]+)/
-    |> Regex.scan(input)
-    |> Enum.reduce(%{}, fn match, acc ->
-      case match do
-        [_, seeds, to, values] when to == "" ->
-          # use "seed" for `to` value
-          Map.put(acc, String.to_atom(seeds), parse_map("seed", values))
+    [seeds | maps] =
+      input
+      |> String.split("\n\n", trim: true)
 
-        [_, from, to, values] ->
-          Map.put(acc, String.to_atom(from), parse_map(to, values))
-      end
-    end)
+    {
+      parse_seeds(seeds),
+      parse_order(maps),
+      parse_maps(maps)
+    }
   end
 
-  defp parse_map(to, values) do
-    values
-    |> String.split("\n", trim: true)
-    |> Enum.map(fn x ->
-      x
+  defp parse_seeds(line) do
+    line
+    |> String.split()
+    |> tl()
+    |> Enum.map(&String.to_integer/1)
+  end
+
+  defp parse_order(maps) do
+    maps
+    |> Enum.map(&(String.split(&1, "-") |> hd()))
+  end
+
+  defp parse_maps(maps) do
+    maps
+    |> Enum.reduce(%{}, &parse_map/2)
+  end
+
+  defp parse_map(map, acc) do
+    [name | mappings] = String.split(map, "\n", trim: true)
+
+    [from, _, _to] =
+      name
+      |> String.replace(" map:", "")
+      |> String.split("-")
+
+    mappings =
+      mappings
+      |> Enum.map(&parse_mapping/1)
+
+    acc
+    |> put_in([from], mappings)
+  end
+
+  defp parse_mapping(line) do
+    [destination_start, source_start, length] =
+      line
       |> String.split()
       |> Enum.map(&String.to_integer/1)
-    end)
-    |> Enum.map(fn x ->
-      if to == "seed" do
-        x
-      else
-        [dest_start, source_start, range_length] = x
 
-        %{
-          dest: dest_start..(dest_start + range_length - 1),
-          source: source_start..(source_start + range_length - 1),
-          diff: dest_start - source_start
-        }
-      end
-    end)
-    |> then(&%{to: String.to_atom(to), map: &1})
+    {
+      source_start..(source_start + length - 1),
+      destination_start..(destination_start + length - 1)
+    }
   end
 end
