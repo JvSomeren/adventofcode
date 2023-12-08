@@ -39,7 +39,7 @@ defmodule AdventOfCode.Day05 do
       |> Enum.reduce([seed_range], fn key, value ->
         maps[key]
         # map each range according to the mappings of the current order item
-        |> Enum.reduce({value, []}, fn mapping, {unmapped_ranges, mapped_ranges} = ranges ->
+        |> Enum.reduce({value, []}, fn mapping, {unmapped_ranges, mapped_ranges} ->
           unmapped_ranges
           |> Enum.map(&map_range(&1, mapping))
           |> Enum.unzip()
