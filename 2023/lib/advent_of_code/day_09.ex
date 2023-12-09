@@ -10,23 +10,10 @@ defmodule AdventOfCode.Day09 do
   def part2(input) do
     input
     |> parse()
+    |> Enum.map(&Enum.reverse/1)
     |> Enum.map(&sequence_to_diff_sequences/1)
-    |> Enum.map(&determine_previous_value_in_sequence/1)
+    |> Enum.map(&determine_next_value_in_sequence/1)
     |> Enum.sum()
-  end
-
-  @spec determine_previous_value_in_sequence([[non_neg_integer()]]) :: non_neg_integer()
-  defp determine_previous_value_in_sequence(sequences) do
-    sequences
-    |> Enum.map(&List.first/1)
-    |> Enum.reverse()
-    |> extrapolate_backwards()
-  end
-
-  defp extrapolate_backwards([result]), do: result
-
-  defp extrapolate_backwards([a, b | tail]) do
-    extrapolate_backwards([b - a | tail])
   end
 
   @spec determine_next_value_in_sequence([[non_neg_integer()]]) :: non_neg_integer()
