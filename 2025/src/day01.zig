@@ -1,13 +1,13 @@
 const std = @import("std");
-const GeneralPurposeAllocator = std.heap.GeneralPurposeAllocator;
-const ArrayList = std.ArrayList;
-const AutoHashMap = std.AutoHashMap;
+const print = std.debug.print;
 const TokenIterator = std.mem.TokenIterator;
+const DelimiterType = std.mem.DelimiterType;
 
-const input = @embedFile("inputs/day01.txt");
-const test_input = @embedFile("test_inputs/day01.txt");
+const day = "01";
+const input = @embedFile("inputs/day" ++ day ++ ".txt");
+const test_input = @embedFile("test_inputs/day" ++ day ++ ".txt");
 
-fn part1(it: *TokenIterator(u8, std.mem.DelimiterType.scalar)) !u16 {
+fn part1(it: *TokenIterator(u8, DelimiterType.scalar)) !u16 {
     it.reset();
 
     var zeroes: u16 = 0;
@@ -25,7 +25,7 @@ fn part1(it: *TokenIterator(u8, std.mem.DelimiterType.scalar)) !u16 {
     return zeroes;
 }
 
-fn part2(it: *TokenIterator(u8, std.mem.DelimiterType.scalar)) !i16 {
+fn part2(it: *TokenIterator(u8, DelimiterType.scalar)) !i16 {
     it.reset();
 
     var zeroes: i16 = 0;
@@ -49,26 +49,26 @@ fn part2(it: *TokenIterator(u8, std.mem.DelimiterType.scalar)) !i16 {
     return zeroes;
 }
 
-fn parse(buffer: []const u8) TokenIterator(u8, std.mem.DelimiterType.scalar) {
+fn parse(buffer: []const u8) TokenIterator(u8, DelimiterType.scalar) {
     return std.mem.tokenizeScalar(u8, buffer, '\n');
 }
 
 pub fn main() !void {
-    std.debug.print("Advent of Code - Day 01\n", .{});
+    print("Advent of Code - Day 01\n", .{});
 
     var it = parse(input);
 
-    std.debug.print("Part 1: {d}\n", .{try part1(&it)});
-    std.debug.print("Part 2: {d}\n", .{try part2(&it)}); // too high: 6706 | Goal: 6695 | too low: 6689
+    print("Part 1: {d}\n", .{try part1(&it)});
+    print("Part 2: {d}\n", .{try part2(&it)});
 }
 
-test "part1" {
+test part1 {
     var it = parse(test_input);
 
     try std.testing.expectEqual(3, try part1(&it));
 }
 
-test "part2" {
+test part2 {
     var it = parse(test_input);
 
     try std.testing.expectEqual(6, try part2(&it));
