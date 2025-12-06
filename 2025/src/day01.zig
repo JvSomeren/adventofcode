@@ -54,7 +54,7 @@ fn parse(buffer: []const u8) TokenIterator(u8, DelimiterType.scalar) {
 }
 
 pub fn main() !void {
-    print("Advent of Code - Day 01\n", .{});
+    print("Advent of Code - Day {s}\n", .{day});
 
     var it = parse(input);
 
